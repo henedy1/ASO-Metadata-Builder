@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASO Metadata Draft Builder</title>
+  <!-- Tailwind CSS for styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
+  <div class="max-w-7xl mx-auto space-y-6">
+    
+    <!-- Top Header Navigation -->
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+      <div>
+        <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
+          <i data-lucide="zap" class="w-6 h-6 text-indigo-600 fill-indigo-100"></i>
+          ASO Metadata Builder
+        </h1>
+        <p class="text-sm text-gray-500 mt-1">Draft, optimize, and export your App Store metadata efficiently.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="clearData()" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-100">
+          <i data-lucide="trash-2" class="w-4 h-4"></i> Clear All
+        </button>
+        <button onclick="exportData()" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors shadow-sm">
+          <i data-lucide="download" class="w-4 h-4"></i> Export Draft
+        </button>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Left Column: Core ASO Fields -->
+      <div class="lg:col-span-2 space-y-5">
+        
+        <!-- App Name -->
+        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
+          <div class="flex justify-between items-end mb-2">
+            <div>
+              <label for="appName" class="text-sm font-bold text-gray-800 flex items-center gap-2">App Name</label>
+              <p class="text-xs text-gray-500 mt-0.5">The most heavily weighted metadata field. Use your strongest keywords here.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="handleCopy('appName')" class="text-gray-400 hover:text-indigo-600 transition-colors flex items-center gap-1 text-xs font-medium" title="Copy App Name">
+                <i data-lucide="copy" class="w-4 h-4" id="copy-icon-appName"></i>
+              </button>
+              <span id="appName-counter" class="text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">0 / 30</span>
+            </div>
+          </div>
+          <input id="appName" type="text" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors" placeholder="Enter App Name...">
+          <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3 overflow-hidden">
+            <div id="appName-bar" class="h-full transition-all duration-300 bg-indigo-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Subtitle -->
+        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
+          <div class="flex justify-between items-end mb-2">
+            <div>
+              <label for="subtitle" class="text-sm font-bold text-gray-800 flex items-center gap-2">Subtitle</label>
+              <p class="text-xs text-gray-500 mt-0.5">Secondary weight. Explain app value without repeating App Name keywords.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="handleCopy('subtitle')" class="text-gray-400 hover:text-indigo-600 transition-colors flex items-center gap-1 text-xs font-medium" title="Copy Subtitle">
+                <i data-lucide="copy" class="w-4 h-4" id="copy-icon-subtitle"></i>
+              </button>
+              <span id="subtitle-counter" class="text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">0 / 30</span>
+            </div>
+          </div>
+          <input id="subtitle" type="text" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors" placeholder="Enter Subtitle...">
+          <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3 overflow-hidden">
+            <div id="subtitle-bar" class="h-full transition-all duration-300 bg-indigo-500" style="width: 0%"></div>
+          </div>
+          <div id="subtitle-warnings" class="mt-3 flex flex-wrap gap-2 empty:hidden"></div>
+        </div>
+
+        <!-- Promotional Text -->
+        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
+          <div class="flex justify-between items-end mb-2">
+            <div>
+              <label for="promo" class="text-sm font-bold text-gray-800 flex items-center gap-2">Promotional Text</label>
+              <p class="text-xs text-gray-500 mt-0.5">Not indexed for ASO, but visible above the description. Good for news & updates.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="handleCopy('promo')" class="text-gray-400 hover:text-indigo-600 transition-colors flex items-center gap-1 text-xs font-medium" title="Copy Promotional Text">
+                <i data-lucide="copy" class="w-4 h-4" id="copy-icon-promo"></i>
+              </button>
+              <span id="promo-counter" class="text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">0 / 170</span>
+            </div>
+          </div>
+          <textarea id="promo" rows="2" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors resize-y" placeholder="Enter Promotional Text..."></textarea>
+          <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3 overflow-hidden">
+            <div id="promo-bar" class="h-full transition-all duration-300 bg-indigo-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Keywords -->
+        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
+          <div class="flex justify-between items-end mb-2">
+            <div>
+              <label for="keywords" class="text-sm font-bold text-gray-800 flex items-center gap-2">Keyword Bank</label>
+              <p class="text-xs text-gray-500 mt-0.5">Comma-separated, no spaces. Hidden from users. Do not repeat words used in Title/Subtitle.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="optimizeKeywords()" class="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 text-xs font-bold rounded-md transition-colors" title="Remove spaces and deduplicate keywords automatically">
+                <i data-lucide="zap" class="w-3.5 h-3.5"></i> Auto-Fix Keywords
+              </button>
+              <button onclick="handleCopy('keywords')" class="text-gray-400 hover:text-indigo-600 transition-colors flex items-center gap-1 text-xs font-medium" title="Copy Keywords">
+                <i data-lucide="copy" class="w-4 h-4" id="copy-icon-keywords"></i>
+              </button>
+              <span id="keywords-counter" class="text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">0 / 100</span>
+            </div>
+          </div>
+          <textarea id="keywords" rows="3" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors resize-y" placeholder="Enter Keyword Bank..."></textarea>
+          <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3 overflow-hidden">
+            <div id="keywords-bar" class="h-full transition-all duration-300 bg-indigo-500" style="width: 0%"></div>
+          </div>
+          <div id="keywords-warnings" class="mt-3 flex flex-wrap gap-2 empty:hidden"></div>
+        </div>
+
+        <!-- Description -->
+        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
+          <div class="flex justify-between items-end mb-2">
+            <div>
+              <label for="description" class="text-sm font-bold text-gray-800 flex items-center gap-2">Description</label>
+              <p class="text-xs text-gray-500 mt-0.5">First 3 lines are crucial for conversion. Indexed by Google Play, but not iOS App Store.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="handleCopy('description')" class="text-gray-400 hover:text-indigo-600 transition-colors flex items-center gap-1 text-xs font-medium" title="Copy Description">
+                <i data-lucide="copy" class="w-4 h-4" id="copy-icon-description"></i>
+              </button>
+              <span id="description-counter" class="text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">0 / 4000</span>
+            </div>
+          </div>
+          <textarea id="description" rows="8" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors resize-y" placeholder="Enter Description..."></textarea>
+          <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3 overflow-hidden">
+            <div id="description-bar" class="h-full transition-all duration-300 bg-indigo-500" style="width: 0%"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Analysis & Tools -->
+      <div class="space-y-6">
+        
+        <!-- Optimization Score -->
+        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+          <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+            Optimization Score
+          </h3>
+          
+          <div class="flex items-center justify-between mb-6">
+            <div id="score-display" class="text-4xl font-extrabold text-indigo-600">0%</div>
+            <div class="text-sm text-gray-500 text-right">
+              Based on standard<br/>App Store guidelines
+            </div>
+          </div>
+
+          <div id="checklist-container" class="space-y-3">
+            <!-- Checklist generated via JS -->
+          </div>
+        </div>
+
+        <!-- Keyword Density Panel -->
+        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+          <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <i data-lucide="bar-chart-2" class="w-5 h-5 text-indigo-500"></i>
+            Keyword Density
+          </h3>
+          <p class="text-xs text-gray-500 mb-4">Top words used across all fields (excluding common stop words).</p>
+          
+          <div id="density-container" class="flex flex-wrap gap-2">
+            <div class="text-sm text-gray-400 italic text-center w-full py-4">Start typing to see keyword density.</div>
+          </div>
+        </div>
+
+        <!-- ASO Quick Tips -->
+        <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
+          <h3 class="text-sm font-bold text-indigo-900 mb-3 flex items-center gap-2">
+            <i data-lucide="info" class="w-4 h-4"></i> Quick ASO Tips
+          </h3>
+          <ul class="text-xs text-indigo-800 space-y-2 list-disc pl-4 marker:text-indigo-300">
+            <li>Don't repeat words. If "Photo" is in your App Name, remove it from your keywords.</li>
+            <li>Avoid spaces in the keyword bank (e.g. use <code class="font-mono bg-indigo-100 px-1 rounded">game,fun</code> not <code class="font-mono bg-indigo-100 px-1 rounded">game, fun</code>).</li>
+            <li>You don't need to include plural forms; the algorithm handles most standard plurals.</li>
+            <li>Don't include the word "App" or competitor brand names.</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // Configuration
+    const MAX_LENGTHS = {
+      appName: 30,
+      subtitle: 30,
+      promo: 170,
+      keywords: 100,
+      description: 4000
+    };
+
+    const STOP_WORDS = new Set([
+      'a', 'an', 'the', 'and', 'or', 'but', 'of', 'in', 'on', 'for', 'to', 'with', 'by', 'at', 
+      'is', 'it', 'as', 'this', 'that', 'your', 'from', 'app', 'we', 'you', 'are', 'be', 'our'
+    ]);
+
+    // State
+    let data = {
+      appName: '',
+      subtitle: '',
+      promo: '',
+      keywords: '',
+      description: ''
+    };
+
+    // Helper: Extract Meaningful Words
+    const extractWords = (text) => {
+      if (!text) return [];
+      const words = text.toLowerCase().match(/\b[a-z0-9]+\b/g) || [];
+      return [...new Set(words.filter(w => w.length > 2 && !STOP_WORDS.has(w)))];
+    };
+
+    // Helper: Check for exact or partial duplicates (substrings)
+    const isPartialDuplicate = (word, refArray) => {
+      return refArray.some(refWord => word === refWord || word.includes(refWord) || refWord.includes(word));
+    };
+
+    // Helper: Common SVGs for dynamic injection
+    const alertSvg = `<svg class="w-3 h-3 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+    const checkSvg = `<svg class="w-4 h-4 text-green-500 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+    const infoSvg = `<svg class="w-4 h-4 text-gray-300 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+
+    // Core Logic: Update UI based on State
+    function renderUI() {
+      // 1. Process Duplicates
+      const titleWordsArr = extractWords(data.appName);
+      const subtitleWordsRaw = extractWords(data.subtitle);
+      const subtitleDuplicates = subtitleWordsRaw.filter(w => isPartialDuplicate(w, titleWordsArr));
+
+      const titleAndSubtitleWordsArr = [...titleWordsArr, ...subtitleWordsRaw];
+      const keywordWordsRaw = extractWords(data.keywords);
+      const keywordDuplicates = keywordWordsRaw.filter(w => isPartialDuplicate(w, titleAndSubtitleWordsArr));
+
+      // 2. Update Inputs & Bars
+      Object.keys(MAX_LENGTHS).forEach(field => {
+        const value = data[field];
+        const max = MAX_LENGTHS[field];
+        const len = value.length;
+        const isOver = len > max;
+        const isWarning = len >= max * 0.85 && !isOver;
+        const percent = Math.min((len / max) * 100, 100);
+
+        // Update Input Value (only if different to avoid cursor jumping)
+        const inputEl = document.getElementById(field);
+        if (inputEl.value !== value) inputEl.value = value;
+
+        // Update Counter
+        const counterEl = document.getElementById(`${field}-counter`);
+        counterEl.innerText = `${len} / ${max}`;
+        counterEl.className = `text-xs font-bold px-2 py-1 rounded-md ${
+          isOver ? 'bg-red-100 text-red-700' : 
+          isWarning ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-700'
+        }`;
+
+        // Update Input Borders
+        inputEl.className = `w-full p-3 rounded-lg border focus:outline-none focus:bg-white transition-colors ${field === 'promo' || field === 'keywords' || field === 'description' ? 'resize-y' : ''} ${
+          isOver ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-gray-50'
+        }`;
+
+        // Update Progress Bar
+        const barEl = document.getElementById(`${field}-bar`);
+        barEl.style.width = `${percent}%`;
+        barEl.className = `h-full transition-all duration-300 ${
+          isOver ? 'bg-red-500' : isWarning ? 'bg-orange-400' : 'bg-indigo-500'
+        }`;
+      });
+
+      // 3. Render Warning Badges
+      const renderWarnings = (id, duplicates) => {
+        const container = document.getElementById(id);
+        if(!container) return;
+        if (duplicates.length === 0) {
+          container.innerHTML = '';
+        } else {
+          container.innerHTML = duplicates.map(word => `
+            <span class="inline-flex items-center px-2 py-1 rounded text-xs font-semibold bg-red-50 text-red-600 border border-red-100">
+              ${alertSvg} Repeated: ${word}
+            </span>
+          `).join('');
+        }
+      };
+      renderWarnings('subtitle-warnings', subtitleDuplicates);
+      renderWarnings('keywords-warnings', keywordDuplicates);
+
+      // 4. Update Checklist & Score
+      const checklist = [
+        { label: 'App Name utilized (>15 chars)', valid: data.appName.length > 15 },
+        { label: 'Subtitle utilized (>15 chars)', valid: data.subtitle.length > 15 },
+        { label: 'Keyword bank optimized (>80 chars)', valid: data.keywords.length > 80 },
+        { label: 'No repeated keywords in critical fields', valid: subtitleDuplicates.length === 0 && keywordDuplicates.length === 0 },
+        { label: 'No spaces after commas in Keywords', valid: data.keywords.length > 0 && !data.keywords.includes(', ') && !data.keywords.includes(' ,') }
+      ];
+
+      const score = Math.round((checklist.filter(c => c.valid).length / checklist.length) * 100) || 0;
+      document.getElementById('score-display').innerText = `${score}%`;
+
+      document.getElementById('checklist-container').innerHTML = checklist.map(item => `
+        <div class="flex items-start gap-3">
+          ${item.valid ? checkSvg : infoSvg}
+          <span class="text-sm ${item.valid ? 'text-gray-700' : 'text-gray-400'}">${item.label}</span>
+        </div>
+      `).join('');
+
+      // 5. Calculate and Render Keyword Density
+      const allText = `${data.appName} ${data.subtitle} ${data.keywords} ${data.description}`;
+      const words = extractWords(allText);
+      const frequencies = {};
+      words.forEach(w => frequencies[w] = (frequencies[w] || 0) + 1);
+      
+      const densityData = Object.entries(frequencies)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8); // Top 8
+
+      const densityContainer = document.getElementById('density-container');
+      if (densityData.length === 0) {
+        densityContainer.innerHTML = `<div class="text-sm text-gray-400 italic text-center w-full py-4">Start typing to see keyword density.</div>`;
+      } else {
+        densityContainer.innerHTML = densityData.map(([word, count]) => `
+          <div class="flex items-center border border-gray-100 rounded-md bg-gray-50 overflow-hidden">
+            <span class="px-3 py-1.5 text-sm font-medium text-gray-700">${word}</span>
+            <span class="px-2 py-1.5 text-xs font-bold bg-indigo-100 text-indigo-800 border-l border-gray-100">${count}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Attach Event Listeners to Inputs
+    Object.keys(MAX_LENGTHS).forEach(field => {
+      document.getElementById(field).addEventListener('input', (e) => {
+        data[field] = e.target.value;
+        localStorage.setItem('aso_metadata_draft', JSON.stringify(data));
+        renderUI();
+      });
+    });
+
+    // Action: Copy to Clipboard
+    function handleCopy(field) {
+      const text = data[field];
+      const iconEl = document.getElementById(`copy-icon-${field}`);
+      
+      const copyExec = () => {
+        // Change icon to checkmark temporarily
+        const oldHtml = iconEl.outerHTML;
+        iconEl.outerHTML = `<svg id="copy-icon-${field}" class="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        
+        setTimeout(() => {
+          document.getElementById(`copy-icon-${field}`).outerHTML = oldHtml;
+          lucide.createIcons(); // Re-initialize standard icon
+        }, 2000);
+      };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(copyExec);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try { document.execCommand('copy'); copyExec(); } catch (err) { console.error(err); }
+        document.body.removeChild(textArea);
+      }
+    }
+
+    // Action: Optimize Keywords
+    function optimizeKeywords() {
+      const titleAndSubtitleWordsArr = [
+        ...extractWords(data.appName), 
+        ...extractWords(data.subtitle)
+      ];
+      
+      let rawKeywords = data.keywords.split(',').map(k => k.trim().toLowerCase()).filter(Boolean);
+      let optimized = [];
+      
+      rawKeywords.forEach(k => {
+        if (!isPartialDuplicate(k, titleAndSubtitleWordsArr) && !isPartialDuplicate(k, optimized)) {
+          optimized.push(k);
+        }
+      });
+      
+      data.keywords = optimized.join(',');
+      document.getElementById('keywords').value = data.keywords;
+      localStorage.setItem('aso_metadata_draft', JSON.stringify(data));
+      renderUI();
+    }
+
+    // Action: Export Text
+    function exportData() {
+      const text = `App Name (${data.appName.length}/${MAX_LENGTHS.appName}):\n${data.appName}\n\n` +
+                   `Subtitle (${data.subtitle.length}/${MAX_LENGTHS.subtitle}):\n${data.subtitle}\n\n` +
+                   `Promotional Text (${data.promo.length}/${MAX_LENGTHS.promo}):\n${data.promo}\n\n` +
+                   `Keywords (${data.keywords.length}/${MAX_LENGTHS.keywords}):\n${data.keywords}\n\n` +
+                   `Description:\n${data.description}`;
+                   
+      const blob = new Blob([text], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ASO_Draft_Export.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Action: Clear All
+    function clearData() {
+      if (window.confirm("Are you sure you want to clear all fields? This cannot be undone.")) {
+        data = { appName: '', subtitle: '', promo: '', keywords: '', description: '' };
+        localStorage.setItem('aso_metadata_draft', JSON.stringify(data));
+        renderUI();
+      }
+    }
+
+    // Initialization
+    window.onload = () => {
+      const saved = localStorage.getItem('aso_metadata_draft');
+      if (saved) {
+        try {
+          data = JSON.parse(saved);
+        } catch (e) {
+          console.error("Failed to parse saved data.");
+        }
+      }
+      renderUI();
+    };
+
+  </script>
+</body>
+</html>
