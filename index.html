@@ -4,22 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ASO Metadata Draft Builder</title>
-  <!-- Tailwind CSS for styling -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="min-h-screen bg-slate-50 text-slate-800 font-sans p-4 md:p-8">
   <div class="max-w-7xl mx-auto space-y-6">
     
-    <!-- Top Header Navigation -->
     <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
       <div>
         <h1 class="text-2xl font-extrabold text-gray-900 tracking-tight flex items-center gap-2">
           <i data-lucide="zap" class="w-6 h-6 text-indigo-600 fill-indigo-100"></i>
           ASO Metadata Builder
         </h1>
-        <p class="text-sm text-gray-500 mt-1">Draft, optimize, and export your App Store metadata efficiently.</p>
+        <p class="text-sm text-gray-500 mt-1">Draft, optimize, and export your App Store and Google Play metadata efficiently.</p>
       </div>
       <div class="flex items-center gap-3">
         <button onclick="clearData()" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-100">
@@ -33,15 +30,42 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       
-      <!-- Left Column: Core ASO Fields -->
       <div class="lg:col-span-2 space-y-5">
         
-        <!-- App Name -->
+        <div class="bg-slate-100 p-5 rounded-xl border border-slate-200 shadow-inner">
+          <h3 class="text-sm font-bold text-slate-700 mb-4 flex items-center gap-2">
+            <i data-lucide="history" class="w-4 h-4"></i> Current Live Metadata (Reference)
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div class="flex justify-between items-end mb-1">
+                <label for="currentAppName" class="text-xs font-bold text-slate-600">Current App Name</label>
+                <span id="currentAppName-counter" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-600">0 / 30</span>
+              </div>
+              <input id="currentAppName" type="text" class="w-full p-2.5 text-sm rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-indigo-400 transition-colors" placeholder="Paste current title...">
+              <div class="w-full h-1 bg-slate-200 rounded-full mt-1.5 overflow-hidden">
+                <div id="currentAppName-bar" class="h-full bg-slate-400 transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+            
+            <div>
+              <div class="flex justify-between items-end mb-1">
+                <label for="currentSubtitle" class="text-xs font-bold text-slate-600">Current Subtitle / Short Desc.</label>
+                <span id="currentSubtitle-counter" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-600">0 / 80</span>
+              </div>
+              <input id="currentSubtitle" type="text" class="w-full p-2.5 text-sm rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-indigo-400 transition-colors" placeholder="Paste current subtitle...">
+              <div class="w-full h-1 bg-slate-200 rounded-full mt-1.5 overflow-hidden">
+                <div id="currentSubtitle-bar" class="h-full bg-slate-400 transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
           <div class="flex justify-between items-end mb-2">
             <div>
-              <label for="appName" class="text-sm font-bold text-gray-800 flex items-center gap-2">App Name</label>
-              <p class="text-xs text-gray-500 mt-0.5">The most heavily weighted metadata field. Use your strongest keywords here.</p>
+              <label for="appName" class="text-sm font-bold text-gray-800 flex items-center gap-2">Draft App Name</label>
+              <p class="text-xs text-gray-500 mt-0.5">The most heavily weighted field. Use your strongest keywords here.</p>
             </div>
             <div class="flex items-center gap-3">
               <button onclick="handleCopy('appName')" class="text-gray-400 hover:text-indigo-600 transition-colors flex items-center gap-1 text-xs font-medium" title="Copy App Name">
@@ -50,17 +74,16 @@
               <span id="appName-counter" class="text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">0 / 30</span>
             </div>
           </div>
-          <input id="appName" type="text" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors" placeholder="Enter App Name...">
+          <input id="appName" type="text" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors font-medium text-indigo-900" placeholder="Enter New App Name...">
           <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3 overflow-hidden">
             <div id="appName-bar" class="h-full transition-all duration-300 bg-indigo-500" style="width: 0%"></div>
           </div>
         </div>
 
-        <!-- Subtitle -->
         <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
           <div class="flex justify-between items-end mb-2">
             <div>
-              <label for="subtitle" class="text-sm font-bold text-gray-800 flex items-center gap-2">Subtitle</label>
+              <label for="subtitle" class="text-sm font-bold text-gray-800 flex items-center gap-2">Draft Subtitle <span class="text-[10px] font-normal bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">App Store (iOS)</span></label>
               <p class="text-xs text-gray-500 mt-0.5">Secondary weight. Explain app value without repeating App Name keywords.</p>
             </div>
             <div class="flex items-center gap-3">
@@ -70,18 +93,36 @@
               <span id="subtitle-counter" class="text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">0 / 30</span>
             </div>
           </div>
-          <input id="subtitle" type="text" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors" placeholder="Enter Subtitle...">
+          <input id="subtitle" type="text" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors" placeholder="Enter New Subtitle...">
           <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3 overflow-hidden">
             <div id="subtitle-bar" class="h-full transition-all duration-300 bg-indigo-500" style="width: 0%"></div>
           </div>
           <div id="subtitle-warnings" class="mt-3 flex flex-wrap gap-2 empty:hidden"></div>
         </div>
 
-        <!-- Promotional Text -->
+        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-green-100 focus-within:border-green-400">
+          <div class="flex justify-between items-end mb-2">
+            <div>
+              <label for="shortDescription" class="text-sm font-bold text-gray-800 flex items-center gap-2">Draft Short Description <span class="text-[10px] font-normal bg-green-50 text-green-700 border border-green-100 px-1.5 py-0.5 rounded">Google Play</span></label>
+              <p class="text-xs text-gray-500 mt-0.5">Highly visible text that impacts Google Play keyword rankings.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="handleCopy('shortDescription')" class="text-gray-400 hover:text-green-600 transition-colors flex items-center gap-1 text-xs font-medium" title="Copy Short Description">
+                <i data-lucide="copy" class="w-4 h-4" id="copy-icon-shortDescription"></i>
+              </button>
+              <span id="shortDescription-counter" class="text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">0 / 80</span>
+            </div>
+          </div>
+          <input id="shortDescription" type="text" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors" placeholder="Enter Short Description...">
+          <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3 overflow-hidden">
+            <div id="shortDescription-bar" class="h-full transition-all duration-300 bg-green-500" style="width: 0%"></div>
+          </div>
+        </div>
+
         <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
           <div class="flex justify-between items-end mb-2">
             <div>
-              <label for="promo" class="text-sm font-bold text-gray-800 flex items-center gap-2">Promotional Text</label>
+              <label for="promo" class="text-sm font-bold text-gray-800 flex items-center gap-2">Promotional Text <span class="text-[10px] font-normal bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">App Store (iOS)</span></label>
               <p class="text-xs text-gray-500 mt-0.5">Not indexed for ASO, but visible above the description. Good for news & updates.</p>
             </div>
             <div class="flex items-center gap-3">
@@ -97,11 +138,10 @@
           </div>
         </div>
 
-        <!-- Keywords -->
         <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
           <div class="flex justify-between items-end mb-2">
             <div>
-              <label for="keywords" class="text-sm font-bold text-gray-800 flex items-center gap-2">Keyword Bank</label>
+              <label for="keywords" class="text-sm font-bold text-gray-800 flex items-center gap-2">Keyword Bank <span class="text-[10px] font-normal bg-gray-100 px-1.5 py-0.5 rounded text-gray-500">App Store (iOS)</span></label>
               <p class="text-xs text-gray-500 mt-0.5">Comma-separated, no spaces. Hidden from users. Do not repeat words used in Title/Subtitle.</p>
             </div>
             <div class="flex items-center gap-3">
@@ -121,11 +161,10 @@
           <div id="keywords-warnings" class="mt-3 flex flex-wrap gap-2 empty:hidden"></div>
         </div>
 
-        <!-- Description -->
         <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm transition-all focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400">
           <div class="flex justify-between items-end mb-2">
             <div>
-              <label for="description" class="text-sm font-bold text-gray-800 flex items-center gap-2">Description</label>
+              <label for="description" class="text-sm font-bold text-gray-800 flex items-center gap-2">Full Description</label>
               <p class="text-xs text-gray-500 mt-0.5">First 3 lines are crucial for conversion. Indexed by Google Play, but not iOS App Store.</p>
             </div>
             <div class="flex items-center gap-3">
@@ -143,10 +182,8 @@
 
       </div>
 
-      <!-- Right Column: Analysis & Tools -->
       <div class="space-y-6">
         
-        <!-- Optimization Score -->
         <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
           <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
             <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
@@ -161,32 +198,29 @@
           </div>
 
           <div id="checklist-container" class="space-y-3">
-            <!-- Checklist generated via JS -->
-          </div>
+            </div>
         </div>
 
-        <!-- Keyword Density Panel -->
         <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
           <h3 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
             <i data-lucide="bar-chart-2" class="w-5 h-5 text-indigo-500"></i>
-            Keyword Density
+            Draft Keyword Density
           </h3>
-          <p class="text-xs text-gray-500 mb-4">Top words used across all fields (excluding common stop words).</p>
+          <p class="text-xs text-gray-500 mb-4">Top words used across your new draft fields (excluding common stop words).</p>
           
           <div id="density-container" class="flex flex-wrap gap-2">
             <div class="text-sm text-gray-400 italic text-center w-full py-4">Start typing to see keyword density.</div>
           </div>
         </div>
 
-        <!-- ASO Quick Tips -->
         <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-100">
           <h3 class="text-sm font-bold text-indigo-900 mb-3 flex items-center gap-2">
             <i data-lucide="info" class="w-4 h-4"></i> Quick ASO Tips
           </h3>
           <ul class="text-xs text-indigo-800 space-y-2 list-disc pl-4 marker:text-indigo-300">
-            <li>Don't repeat words. If "Photo" is in your App Name, remove it from your keywords.</li>
-            <li>Avoid spaces in the keyword bank (e.g. use <code class="font-mono bg-indigo-100 px-1 rounded">game,fun</code> not <code class="font-mono bg-indigo-100 px-1 rounded">game, fun</code>).</li>
-            <li>You don't need to include plural forms; the algorithm handles most standard plurals.</li>
+            <li><strong>iOS:</strong> Don't repeat words across Title, Subtitle, or Keywords. Plurals are usually handled automatically.</li>
+            <li><strong>Android:</strong> Keyword density matters! Repeating important keywords reasonably across Title, Short Desc, and Long Desc is beneficial.</li>
+            <li>Avoid spaces in the iOS keyword bank (e.g. use <code class="font-mono bg-indigo-100 px-1 rounded">game,fun</code> not <code class="font-mono bg-indigo-100 px-1 rounded">game, fun</code>).</li>
             <li>Don't include the word "App" or competitor brand names.</li>
           </ul>
         </div>
@@ -195,15 +229,17 @@
     </div>
   </div>
 
-  <!-- Application Logic -->
   <script>
     // Initialize Icons
     lucide.createIcons();
 
     // Configuration
     const MAX_LENGTHS = {
+      currentAppName: 30,
+      currentSubtitle: 80,
       appName: 30,
       subtitle: 30,
+      shortDescription: 80,
       promo: 170,
       keywords: 100,
       description: 4000
@@ -216,8 +252,11 @@
 
     // State
     let data = {
+      currentAppName: '',
+      currentSubtitle: '',
       appName: '',
       subtitle: '',
+      shortDescription: '',
       promo: '',
       keywords: '',
       description: ''
@@ -242,7 +281,7 @@
 
     // Core Logic: Update UI based on State
     function renderUI() {
-      // 1. Process Duplicates
+      // 1. Process Duplicates (Only evaluating Drafts, not current live)
       const titleWordsArr = extractWords(data.appName);
       const subtitleWordsRaw = extractWords(data.subtitle);
       const subtitleDuplicates = subtitleWordsRaw.filter(w => isPartialDuplicate(w, titleWordsArr));
@@ -267,22 +306,35 @@
         // Update Counter
         const counterEl = document.getElementById(`${field}-counter`);
         counterEl.innerText = `${len} / ${max}`;
-        counterEl.className = `text-xs font-bold px-2 py-1 rounded-md ${
-          isOver ? 'bg-red-100 text-red-700' : 
-          isWarning ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-700'
-        }`;
+        
+        // Custom styling for standard vs reference fields
+        if(field.startsWith('current')) {
+           counterEl.className = `text-[10px] font-bold px-1.5 py-0.5 rounded ${isOver ? 'bg-red-200 text-red-800' : 'bg-slate-200 text-slate-600'}`;
+        } else {
+           counterEl.className = `text-xs font-bold px-2 py-1 rounded-md ${
+             isOver ? 'bg-red-100 text-red-700' : 
+             isWarning ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-700'
+           }`;
+        }
 
         // Update Input Borders
-        inputEl.className = `w-full p-3 rounded-lg border focus:outline-none focus:bg-white transition-colors ${field === 'promo' || field === 'keywords' || field === 'description' ? 'resize-y' : ''} ${
-          isOver ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-gray-50'
-        }`;
+        if(!field.startsWith('current')) {
+            inputEl.className = `w-full p-3 rounded-lg border focus:outline-none focus:bg-white transition-colors ${field === 'appName' ? 'font-medium text-indigo-900 ' : ''}${field === 'promo' || field === 'keywords' || field === 'description' ? 'resize-y ' : ''}${
+              isOver ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-gray-50'
+            }`;
+        }
 
         // Update Progress Bar
         const barEl = document.getElementById(`${field}-bar`);
         barEl.style.width = `${percent}%`;
-        barEl.className = `h-full transition-all duration-300 ${
-          isOver ? 'bg-red-500' : isWarning ? 'bg-orange-400' : 'bg-indigo-500'
-        }`;
+        
+        if(field.startsWith('current')) {
+             barEl.className = `h-full transition-all duration-300 ${isOver ? 'bg-red-400' : 'bg-slate-400'}`;
+        } else if (field === 'shortDescription') {
+             barEl.className = `h-full transition-all duration-300 ${isOver ? 'bg-red-500' : isWarning ? 'bg-orange-400' : 'bg-green-500'}`;
+        } else {
+             barEl.className = `h-full transition-all duration-300 ${isOver ? 'bg-red-500' : isWarning ? 'bg-orange-400' : 'bg-indigo-500'}`;
+        }
       });
 
       // 3. Render Warning Badges
@@ -304,10 +356,10 @@
 
       // 4. Update Checklist & Score
       const checklist = [
-        { label: 'App Name utilized (>15 chars)', valid: data.appName.length > 15 },
-        { label: 'Subtitle utilized (>15 chars)', valid: data.subtitle.length > 15 },
+        { label: 'Draft App Name utilized (>15 chars)', valid: data.appName.length > 15 },
+        { label: 'Draft Subtitle utilized (>15 chars)', valid: data.subtitle.length > 15 },
         { label: 'Keyword bank optimized (>80 chars)', valid: data.keywords.length > 80 },
-        { label: 'No repeated keywords in critical fields', valid: subtitleDuplicates.length === 0 && keywordDuplicates.length === 0 },
+        { label: 'No repeated keywords in iOS fields', valid: subtitleDuplicates.length === 0 && keywordDuplicates.length === 0 },
         { label: 'No spaces after commas in Keywords', valid: data.keywords.length > 0 && !data.keywords.includes(', ') && !data.keywords.includes(' ,') }
       ];
 
@@ -321,8 +373,8 @@
         </div>
       `).join('');
 
-      // 5. Calculate and Render Keyword Density
-      const allText = `${data.appName} ${data.subtitle} ${data.keywords} ${data.description}`;
+      // 5. Calculate and Render Keyword Density (Draft fields only)
+      const allText = `${data.appName} ${data.subtitle} ${data.shortDescription} ${data.keywords} ${data.description}`;
       const words = extractWords(allText);
       const frequencies = {};
       words.forEach(w => frequencies[w] = (frequencies[w] || 0) + 1);
@@ -359,13 +411,12 @@
       const iconEl = document.getElementById(`copy-icon-${field}`);
       
       const copyExec = () => {
-        // Change icon to checkmark temporarily
         const oldHtml = iconEl.outerHTML;
         iconEl.outerHTML = `<svg id="copy-icon-${field}" class="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
         
         setTimeout(() => {
           document.getElementById(`copy-icon-${field}`).outerHTML = oldHtml;
-          lucide.createIcons(); // Re-initialize standard icon
+          lucide.createIcons();
         }, 2000);
       };
 
@@ -406,11 +457,16 @@
 
     // Action: Export Text
     function exportData() {
-      const text = `App Name (${data.appName.length}/${MAX_LENGTHS.appName}):\n${data.appName}\n\n` +
-                   `Subtitle (${data.subtitle.length}/${MAX_LENGTHS.subtitle}):\n${data.subtitle}\n\n` +
-                   `Promotional Text (${data.promo.length}/${MAX_LENGTHS.promo}):\n${data.promo}\n\n` +
-                   `Keywords (${data.keywords.length}/${MAX_LENGTHS.keywords}):\n${data.keywords}\n\n` +
-                   `Description:\n${data.description}`;
+      const text = `--- CURRENT METADATA ---\n` +
+                   `Live Title: ${data.currentAppName}\n` +
+                   `Live Subtitle: ${data.currentSubtitle}\n\n` +
+                   `--- NEW METADATA DRAFT ---\n` +
+                   `Draft App Name (${data.appName.length}/${MAX_LENGTHS.appName}):\n${data.appName}\n\n` +
+                   `Draft Subtitle [iOS] (${data.subtitle.length}/${MAX_LENGTHS.subtitle}):\n${data.subtitle}\n\n` +
+                   `Short Description [Android] (${data.shortDescription.length}/${MAX_LENGTHS.shortDescription}):\n${data.shortDescription}\n\n` +
+                   `Promotional Text [iOS] (${data.promo.length}/${MAX_LENGTHS.promo}):\n${data.promo}\n\n` +
+                   `Keywords [iOS] (${data.keywords.length}/${MAX_LENGTHS.keywords}):\n${data.keywords}\n\n` +
+                   `Full Description:\n${data.description}`;
                    
       const blob = new Blob([text], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
@@ -424,7 +480,7 @@
     // Action: Clear All
     function clearData() {
       if (window.confirm("Are you sure you want to clear all fields? This cannot be undone.")) {
-        data = { appName: '', subtitle: '', promo: '', keywords: '', description: '' };
+        data = { currentAppName: '', currentSubtitle: '', appName: '', subtitle: '', shortDescription: '', promo: '', keywords: '', description: '' };
         localStorage.setItem('aso_metadata_draft', JSON.stringify(data));
         renderUI();
       }
@@ -435,7 +491,8 @@
       const saved = localStorage.getItem('aso_metadata_draft');
       if (saved) {
         try {
-          data = JSON.parse(saved);
+          // Merge with default state to ensure new keys exist
+          data = { ...data, ...JSON.parse(saved) };
         } catch (e) {
           console.error("Failed to parse saved data.");
         }
