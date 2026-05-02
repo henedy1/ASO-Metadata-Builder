@@ -69,6 +69,7 @@
               <div class="w-full h-1 bg-slate-200 rounded-full mt-1.5 overflow-hidden">
                 <div id="currentSubtitle-bar" class="h-full bg-slate-400 transition-all duration-300" style="width: 0%"></div>
               </div>
+              <div id="currentSubtitle-warnings" class="mt-2 flex flex-wrap gap-2 empty:hidden"></div>
             </div>
 
             <div class="md:col-span-2" id="wrapper-currentKeywords">
@@ -80,6 +81,7 @@
               <div class="w-full h-1 bg-slate-200 rounded-full mt-1.5 overflow-hidden">
                 <div id="currentKeywords-bar" class="h-full bg-slate-400 transition-all duration-300" style="width: 0%"></div>
               </div>
+              <div id="currentKeywords-warnings" class="mt-2 flex flex-wrap gap-2 empty:hidden"></div>
             </div>
           </div>
         </div>
@@ -333,16 +335,26 @@
       
       document.getElementById('lbl-currentSubtitle').innerHTML = isIOS ? 'Current Subtitle <span class="text-[10px] font-normal bg-slate-200 px-1 rounded ml-1">iOS</span>' : 'Current Short Desc <span class="text-[10px] font-normal bg-green-100 text-green-700 border border-green-200 px-1 rounded ml-1">Android</span>';
 
-      // 1. Process Duplicates (Only evaluating Drafts, not current live)
+      // 1. Process Duplicates (Drafts)
       const titleWordsArr = extractWords(data.appName);
       const subtitleWordsRaw = extractWords(data.subtitle);
       
-      // Filter out ignored warnings
       const subtitleDuplicates = subtitleWordsRaw.filter(w => isPartialDuplicate(w, titleWordsArr) && !data.ignoredWarnings.includes(w));
 
       const titleAndSubtitleWordsArr = [...titleWordsArr, ...subtitleWordsRaw];
       const keywordWordsRaw = extractWords(data.keywords);
       const keywordDuplicates = keywordWordsRaw.filter(w => isPartialDuplicate(w, titleAndSubtitleWordsArr) && !data.ignoredWarnings.includes(w));
+
+      // 1b. Process Duplicates (Current Live Metadata)
+      const currentTitleWordsArr = extractWords(data.currentAppName);
+      const currentSubtitleWordsRaw = extractWords(data.currentSubtitle);
+      
+      const currentSubtitleDuplicates = currentSubtitleWordsRaw.filter(w => isPartialDuplicate(w, currentTitleWordsArr) && !data.ignoredWarnings.includes(w));
+
+      const currentTitleAndSubtitleWordsArr = [...currentTitleWordsArr, ...currentSubtitleWordsRaw];
+      const currentKeywordWordsRaw = extractWords(data.currentKeywords);
+      const currentKeywordDuplicates = currentKeywordWordsRaw.filter(w => isPartialDuplicate(w, currentTitleAndSubtitleWordsArr) && !data.ignoredWarnings.includes(w));
+
 
       // 2. Update Inputs & Bars
       Object.keys(MAX_LENGTHS).forEach(field => {
@@ -408,8 +420,14 @@
           `).join('');
         }
       };
+      
+      // Render warnings for Drafts
       renderWarnings('subtitle-warnings', subtitleDuplicates);
       renderWarnings('keywords-warnings', keywordDuplicates);
+      
+      // Render warnings for Current Live
+      renderWarnings('currentSubtitle-warnings', currentSubtitleDuplicates);
+      renderWarnings('currentKeywords-warnings', currentKeywordDuplicates);
 
       // 4. Update Checklist & Score
       let checklist = [];
