@@ -65,7 +65,7 @@
                 <label for="currentSubtitle" class="text-xs font-bold text-slate-600" id="lbl-currentSubtitle">Current Subtitle / Short Desc.</label>
                 <span id="currentSubtitle-counter" class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-600">0 / 30</span>
               </div>
-              <input id="currentSubtitle" type="text" class="w-full p-2.5 text-sm rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-indigo-400 transition-colors" placeholder="Paste current subtitle...">
+              <textarea id="currentSubtitle" rows="2" class="w-full p-2.5 text-sm rounded-lg border border-slate-300 bg-white focus:outline-none focus:border-indigo-400 transition-colors resize-y" placeholder="Paste current subtitle..."></textarea>
               <div class="w-full h-1 bg-slate-200 rounded-full mt-1.5 overflow-hidden">
                 <div id="currentSubtitle-bar" class="h-full bg-slate-400 transition-all duration-300" style="width: 0%"></div>
               </div>
@@ -138,7 +138,7 @@
               <span id="shortDescription-counter" class="text-xs font-bold px-2 py-1 rounded-md bg-gray-100 text-gray-700">0 / 80</span>
             </div>
           </div>
-          <input id="shortDescription" type="text" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors" placeholder="Enter Short Description...">
+          <textarea id="shortDescription" rows="2" class="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:bg-white transition-colors resize-y" placeholder="Enter Short Description..."></textarea>
           <div class="w-full h-1.5 bg-gray-100 rounded-full mt-3 overflow-hidden">
             <div id="shortDescription-bar" class="h-full transition-all duration-300 bg-green-500" style="width: 0%"></div>
           </div>
@@ -385,7 +385,7 @@
 
         // Update Input Borders
         if(!field.startsWith('current')) {
-            inputEl.className = `w-full p-3 rounded-lg border focus:outline-none focus:bg-white transition-colors ${field === 'appName' ? 'font-medium text-indigo-900 ' : ''}${field === 'promo' || field === 'keywords' || field === 'description' ? 'resize-y ' : ''}${
+            inputEl.className = `w-full p-3 rounded-lg border focus:outline-none focus:bg-white transition-colors ${field === 'appName' ? 'font-medium text-indigo-900 ' : ''}${field === 'promo' || field === 'keywords' || field === 'description' || field === 'shortDescription' ? 'resize-y ' : ''}${
               isOver ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-gray-50'
             }`;
         }
